@@ -29,7 +29,7 @@ awk '/open/ { split($1,a,"/"); print a[1] }' "$OUTDIR/nmap.txt" \
 # Service Enumeration
 if [[ -s "$OUTDIR/open_ports.csv" ]]; then
     echo "Running service enumeration"
-    nmap -sV -p "$(cat "$OUTDIR/open_ports.csv")" "$TARGET" \
+    nmap -sC -sV -p "$(cat "$OUTDIR/open_ports.csv")" "$TARGET" \
         | tee "$OUTDIR/services.txt"
 else
     echo "No open ports found"
