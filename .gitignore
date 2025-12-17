@@ -8,12 +8,17 @@ Thumbs.db
 *.log
 *.tmp
 
-# Build artifacts / binaries (if any)
+# Build artifacts
 *.out
 *.exe
 *.o
 
-# Node / Python / Go artifacts (if you ever add)
+# Testing Files
+recon/
+findings/
+parse/
+
+# Node / Python / Go artifacts
 node_modules/
 __pycache__/
 build/
