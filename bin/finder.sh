@@ -1,3 +1,11 @@
 #! /usr/bin/env bash
+set -euo pipefail
 
-echo "Initial setup for finder.sh"
+TARGET="$1"
+PORTS=$(tr ',' ' ' < "recon/$TARGET/open_ports.csv")
+OUTDIR="recon/$TARGET"
+
+# Testing version
+for p in $(echo "$PORTS" | tr ',' ' '); do
+    curl -I "$TARGET:$p" | tee "$OUTDIR/finder_headers.txt"
+done
