@@ -13,6 +13,7 @@ OUTDIR="recon/$TARGET"
 : > "$OUTDIR/finder_headers.txt"
 : > "$OUTDIR/finder_body.txt"
 
+# TODO non-http Testing
 handle_non_http() {
     echo "[STUB] Port $1 requires protocol-specific finder"
 }
@@ -21,8 +22,12 @@ handle_non_http() {
 for p in $PORTS; do
     if [[ "$p" == "443" ]]; then
         SCHEME="https"
+
+        openssl s_client -connect "$TARGET:443" -servername "$TARGET" < /dev/null 2>/dev/null \
+            | openssl x509 -noout -text \
+            >> "$OUTDIR/tls.txt" || true
     elif [[ "$p" == "80" ]]; then
-        SCHEME="http"    
+        SCHEME="http"
     else
     handle_non_http "$p"
     continue    
@@ -36,5 +41,3 @@ for p in $PORTS; do
     # -sk for send a BODY request.
     curl -sk "$URL" >> "$OUTDIR/finder_body.txt" || true
 done
-
-
