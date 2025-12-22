@@ -10,9 +10,15 @@ OUTDIR="recon/$TARGET"
 # Creating Directory
 mkdir -p "$OUTDIR"
 
-# Checking the target if alive
-echo "Ping to $TARGET"
-ping -c 1 "$TARGET" >/dev/null && echo "Alive" | tee "$OUTDIR/alive.txt" 
+echo "Resolving target"
+getent hosts "$TARGET" | tee "$OUTDIR/dns.txt" || true
+
+echo "Checking if target is alive"
+if ping -c 1 "$TARGET" >/dev/null 2>&1; then
+    echo "ICMP reachable" | tee "$OUTDIR/alive.txt"
+else
+    echo "ICMP blocked or host filtered" | tee "$OUTDIR/alive.txt"
+fi
 
 # Checking for open ports
 echo "Scanning $TARGET"
